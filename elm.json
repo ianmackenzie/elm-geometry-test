@@ -1,0 +1,22 @@
+{
+    "type": "package",
+    "name": "ianmackenzie/elm-geometry-test",
+    "summary": "Helpful utilities for testing code that uses elm-geometry",
+    "license": "MPL-2.0",
+    "version": "1.0.0",
+    "exposed-modules": [
+        "Geometry.Expect",
+        "Geometry.Fuzz"
+    ],
+    "elm-version": "0.19.0 <= v < 0.20.0",
+    "dependencies": {
+        "elm/core": "1.0.0 <= v < 2.0.0",
+        "elm/random": "1.0.0 <= v < 2.0.0",
+        "elm-explorations/test": "1.1.0 <= v < 2.0.0",
+        "ianmackenzie/elm-geometry": "3.2.0 <= v < 4.0.0",
+        "ianmackenzie/elm-units": "2.2.0 <= v < 3.0.0"
+    },
+    "test-dependencies": {
+        "elm-community/list-extra": "8.0.0 <= v < 9.0.0"
+    }
+}
