@@ -2,11 +2,29 @@ port module CopyFromElmGeometry exposing (main)
 
 import Json.Encode exposing (Value)
 import Script exposing (Script)
-import Script.Directory as Directory
+import Script.Directory as Directory exposing (Directory, Writable)
 import Script.File as File
 
 
-script : Script.Init -> Script Int ()
+ensureEmpty : Directory Writable -> Script String ()
+ensureEmpty directory =
+    Directory.checkExistence directory
+        |> Script.thenWith
+            (\existence ->
+                case existence of
+                    Directory.Exists ->
+                        Directory.obliterate directory
+                            |> Script.andThen (Directory.create directory)
+
+                    Directory.DoesNotExist ->
+                        Directory.create directory
+
+                    Directory.IsNotADirectory ->
+                        Script.fail (Directory.name directory ++ " already exists and is not a directory")
+            )
+
+
+script : Script.Init -> Script String ()
 script { userPrivileges } =
     let
         sourceDirectory =
@@ -21,10 +39,9 @@ script { userPrivileges } =
             , "Polygon2d/Random.elm"
             ]
     in
-    Directory.obliterate destinationDirectory
-        |> Script.andThen (Directory.create destinationDirectory)
-        |> Script.andThen (Directory.create (Directory.subdir destinationDirectory "Geometry"))
-        |> Script.andThen (Directory.create (Directory.subdir destinationDirectory "Polygon2d"))
+    ensureEmpty destinationDirectory
+        |> Script.andThen (Directory.create (Directory.in_ destinationDirectory "Geometry"))
+        |> Script.andThen (Directory.create (Directory.in_ destinationDirectory "Polygon2d"))
         |> Script.andThen
             (fileNames
                 |> Script.each
@@ -33,8 +50,6 @@ script { userPrivileges } =
                             (File.in_ destinationDirectory fileName)
                     )
             )
-        |> Script.onError
-            (\{ message } -> Script.printLine message |> Script.andThen (Script.fail 1))
 
 
 port requestPort : Value -> Cmd msg
