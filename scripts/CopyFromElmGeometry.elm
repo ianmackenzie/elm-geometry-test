@@ -1,4 +1,4 @@
-port module CopyFromElmGeometry exposing (main)
+module CopyFromElmGeometry exposing (main)
 
 import Json.Encode exposing (Value)
 import Script exposing (Script)
@@ -28,7 +28,7 @@ script : Script.Init -> Script String ()
 script { userPrivileges } =
     let
         sourceDirectory =
-            Directory.readOnly userPrivileges "C:/Git/ianmackenzie/elm-geometry/src"
+            Directory.readOnly userPrivileges "C:/Git/ianmackenzie/elm-geometry/tests"
 
         destinationDirectory =
             Directory.writable userPrivileges "C:/Git/ianmackenzie/elm-geometry-test/src"
@@ -51,13 +51,6 @@ script { userPrivileges } =
                     )
             )
 
-
-port requestPort : Value -> Cmd msg
-
-
-port responsePort : (Value -> msg) -> Sub msg
-
-
 main : Script.Program
 main =
-    Script.program script requestPort responsePort
+    Script.program script
