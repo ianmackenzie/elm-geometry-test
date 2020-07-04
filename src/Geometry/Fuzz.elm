@@ -1,19 +1,10 @@
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- This Source Code Form is subject to the terms of the Mozilla Public        --
--- License, v. 2.0. If a copy of the MPL was not distributed with this file,  --
--- you can obtain one at http://mozilla.org/MPL/2.0/.                         --
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-
-
 module Geometry.Fuzz exposing
     ( scale, parameterValue
     , length, positiveLength, angle, quantityRange
     , point2d, point3d, vector2d, vector3d, direction2d, direction3d, boundingBox2d, boundingBox3d
     , axis2d, axis3d, frame2d, frame3d, plane3d, sketchPlane3d
     , lineSegment2d, lineSegment3d, triangle2d, triangle3d, rectangle2d, block3d, polyline2d, polyline3d, polygon2d
-    , arc2d, arc3d, circle2d, circle3d, cubicSpline2d, cubicSpline3d, cylinder3d, ellipse2d, ellipticalArc2d, quadraticSpline2d, quadraticSpline3d, sphere3d
+    , arc2d, arc3d, circle2d, circle3d, cubicSpline2d, cubicSpline3d, cylinder3d, cone3d, ellipse2d, ellipticalArc2d, ellipticalArc3d, quadraticSpline2d, quadraticSpline3d, sphere3d
     )
 
 {-| A collection of [`Fuzzer`](https://package.elm-lang.org/packages/elm-explorations/test/latest/Fuzz)s
@@ -61,7 +52,7 @@ running into any naming conflicts.
 
 # Complex geometry
 
-@docs arc2d, arc3d, circle2d, circle3d, cubicSpline2d, cubicSpline3d, cylinder3d, ellipse2d, ellipticalArc2d, quadraticSpline2d, quadraticSpline3d, sphere3d
+@docs arc2d, arc3d, circle2d, circle3d, cubicSpline2d, cubicSpline3d, cylinder3d, cone3d, ellipse2d, ellipticalArc2d, ellipticalArc3d, quadraticSpline2d, quadraticSpline3d, sphere3d
 
 -}
 
@@ -75,6 +66,7 @@ import BoundingBox2d exposing (BoundingBox2d)
 import BoundingBox3d exposing (BoundingBox3d)
 import Circle2d exposing (Circle2d)
 import Circle3d exposing (Circle3d)
+import Cone3d exposing (Cone3d)
 import CubicSpline2d exposing (CubicSpline2d)
 import CubicSpline3d exposing (CubicSpline3d)
 import Cylinder3d exposing (Cylinder3d)
@@ -82,6 +74,7 @@ import Direction2d exposing (Direction2d)
 import Direction3d exposing (Direction3d)
 import Ellipse2d exposing (Ellipse2d)
 import EllipticalArc2d exposing (EllipticalArc2d)
+import EllipticalArc3d exposing (EllipticalArc3d)
 import Frame2d exposing (Frame2d)
 import Frame3d exposing (Frame3d)
 import Fuzz exposing (Fuzzer)
@@ -488,6 +481,13 @@ ellipticalArc2d =
         (Fuzz.tuple ( angle, angle ))
 
 
+{-| Generate a random `EllipticalArc3d`.
+-}
+ellipticalArc3d : Fuzzer (EllipticalArc3d Meters coordinates)
+ellipticalArc3d =
+    Fuzz.map2 EllipticalArc3d.on sketchPlane3d ellipticalArc2d
+
+
 {-| Generate a random `Rectangle2d`.
 -}
 rectangle2d : Fuzzer (Rectangle2d Meters coordinates)
@@ -522,3 +522,17 @@ cylinder3d =
                 }
     in
     Fuzz.map4 cylinder point3d direction3d positiveLength positiveLength
+
+
+{-| Generate a random `Cone3d`.
+-}
+cone3d : Fuzzer (Cone3d Meters coordinates)
+cone3d =
+    let
+        cone basePoint direction coneLength coneRadius =
+            Cone3d.startingAt basePoint direction <|
+                { length = coneLength
+                , radius = coneRadius
+                }
+    in
+    Fuzz.map4 cone point3d direction3d positiveLength positiveLength
