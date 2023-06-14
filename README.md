@@ -2,8 +2,7 @@
 
 This package contains some helpful utilities for testing code that uses
 [`elm-geometry`](https://package.elm-lang.org/packages/ianmackenzie/elm-geometry/latest/).
-This includes both [`Fuzzer`](https://package.elm-lang.org/packages/elm-explorations/test/latest/Fuzz)s
-for generating random geometric values, and functions for constructing
+This includes both random generators for test input values, and functions for constructing
 [`Expectation`](https://package.elm-lang.org/packages/elm-explorations/test/latest/Expect)s
 that compare geometric values to within a small tolerance (to allow for
 numerical roundoff).
