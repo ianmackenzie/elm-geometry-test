@@ -28,13 +28,13 @@ script : Script.Init -> Script String ()
 script { userPrivileges } =
     let
         sourceDirectory =
-            Directory.readOnly userPrivileges "C:/Git/ianmackenzie/elm-geometry/tests"
+            Directory.readOnly userPrivileges "/home/ian/github/ianmackenzie/elm-geometry/tests"
 
         destinationDirectory =
-            Directory.writable userPrivileges "C:/Git/ianmackenzie/elm-geometry-test/src"
+            Directory.writable userPrivileges "/home/ian/github/ianmackenzie/elm-geometry-test/src"
 
         fileNames =
-            [ "Geometry/Fuzz.elm"
+            [ "Geometry/Random.elm"
             , "Geometry/Expect.elm"
             , "Polygon2d/Random.elm"
             ]
