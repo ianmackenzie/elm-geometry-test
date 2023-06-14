@@ -3,7 +3,7 @@
     "name": "ianmackenzie/elm-geometry-test",
     "summary": "Helpful utilities for testing code that uses elm-geometry",
     "license": "MPL-2.0",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "exposed-modules": [
         "Geometry.Expect",
         "Geometry.Random"
